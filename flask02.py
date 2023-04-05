@@ -39,7 +39,7 @@ def calculate():
     solid_liquid_ratio = float(request.form['固液比'])
     equilibrium_concentration = float(request.form['溶液平衡浓度'])
 
-    # 这边我进行了加和运算，你需要怎么算就怎么算吧
+  
     np.random.seed(80)
     def readData_cv(K=9):
         df = pd.read_csv("C:\\data1\\new_data.csv")
