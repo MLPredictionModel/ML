@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器学习</title>
+    <h1>土壤对多环芳烃（菲）的吸附容量预测模型</h1>
+    <style>
+        /* div {
+            background-color: rgb(229, 190, 190);
+            width: 300px;
+            /* border: 25px solid green; */
+        /* padding: 15px;
+            margin: 8px;
+            height: 20px; */
+        /* }  */
+
+        .div-a {
+            float: left;
+            width: 46%;
+            border: 1px
+        }
+
+        .div-b {
+            float: right;
+            width: 46%;
+            border: 1px
+        }
+
+        div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+
+
+        label {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        input {
+            width: 50%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            margin-top: 50px;
+            color: #2f2f2f;
+            text-shadow: 2px 2px #ddd;
+            border: 1px solid black;
+        }
+
+        button {
+            position: relative;
+            left: 50%;
+            top: 30px;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #697069;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* button {
+            position: relative;
+            top: 30px;
+            margin: 450px auto; */
+        /* left: 50%; */
+
+        /* bottom: 0; */
+        /* transform: translateX(-50%); */
+        /* } */
+    </style>
+</head>
+
+<body>
+    <script>
+        alert('欢迎来到预测模型');
+    </script>
+    <!-- <form action="form.js" method="POST"> -->
+
+    <form action="/submit" method="post">
+        <!-- <div>
+                    <label>heavy metal</label>
+                    <input type="text" name="heavy metal" placeholder="Enter heavy metal,like:Cd">
+                </div>
+                <div>
+                    <label>ph of soil</label>
+                    <input type="text" name="ph of soil" placeholder="Enter ph">
+                </div>
+                <div>
+                    <label>soil cation exchange capacity (CEC, cmol/kg)</label>
+                    <input type="text" name="soil cation exchange capacity (CEC, cmol/kg)" placeholder="0.105-117">
+                </div> -->
+
+        <div class="div-a">
+
+            <label>土壤ph</label>
+
+            <input type="text" name="土壤ph" placeholder="ph:1~7" id="01" value="">
+        </div>
+        <div class="div-b">
+            <label>土壤黏土含量</label>
+            <!-- <br> -->
+            <input type="text" name="土壤黏土含量" placeholder="" id="02">
+        </div>
+        <div class="div-a">
+            <label>土壤CEC</label>
+            <input type="text" name="土壤CEC" placeholder="">
+        </div>
+        <div class="div-b">
+            <label>TOC</label>
+            <input type="text" name="TOC" placeholder="">
+        </div>
+        <div class="div-a">
+            <label>BET</label>
+            <input type="text" name="BET" placeholder="">
+        </div>
+        <div class="div-b">
+            <label>温度</label>
+            <input type="text" name="温度" placeholder="">
+        </div>
+        <div class="div-a">
+            <label>固液比</label>
+            <input type="text" name="固液比" placeholder="">
+        </div>
+        <div class="div-b">
+            <label>溶液平衡浓度</label>
+            <input type="text" name="溶液平衡浓度" placeholder="">
+        </div>
+        <!-- <div class="div-c" style="position: relative;">
+            <input type="text" name="myInput">
+            <button style="position: absolute; bottom: 0;">提交</button>
+        </div> -->
+        <button type="submit">提交</button>
+
+        <!-- <div> -->
+        <!--                 
+                <input type="text" placeholder="答案" id="anw">
+                <input type="button" value="计算" onclick="calc()"> -->
+        <!-- </div> -->
+
+    </form>
+</body>
+
+
+<script>
+
+
+    // const resultInput = document.getElementById('result');
+    //     const result = response.result;  // 假设response是后端返回的json数据
+    //     resultInput.value = result;
+    // fetch('/submit', {
+    //     method: 'POST',
+    //     body: JSON.stringify(data),
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     }
+    // })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         // 将结果显示在页面上
+    //         document.getElementById('result').textContent = `计算结果：${data.result}`;
+    //     })
+    //     .catch(error => console.error(error));
+        // 获取所有输入框元素
+        // const inputFields = document.querySelectorAll('.input-field');
+
+        // // 创建一个空的对象来存储输入框的值
+        // const data = {};
+
+        // // 遍历每个输入框，将其名称和值添加到data对象中
+        // inputFields.forEach(input => {
+        //     const name = input.id;
+        //     const value = input.value;
+        //     data[name] = value;
+        // });
+
+        // 发送POST请求到Flask后端
+        // fetch('http://127.0.0.1:5000/api', {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(data)
+        // })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log('Success:', data);
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error:', error);
+        //     });
+</script>
+
+
+</html>
