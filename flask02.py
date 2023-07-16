@@ -9,8 +9,7 @@ app = Flask(__name__)
 
 
 # @app.route('/api', methods=['POST'])
-# def api_handler():
-#     # 在这里处理 /api 路径上的 POST 请求
+# def api_handler():   
 #     return render_template('index 01.html')
 #     pass
 
@@ -18,18 +17,8 @@ app = Flask(__name__)
 def index():
     return render_template('index 01.html')
 
-
-
-
-
-
-
-
-
-
 @app.route('/submit', methods=['POST'])
 def submit():
-    # 从表单中获取数据
     ph = float(request.form['pH of soil'])
     clay = float(request.form['clay content'])
     cec = float(request.form['CEC'])
@@ -39,35 +28,22 @@ def submit():
     solid_liquid_ratio = float(request.form['ratio'])
     equilibrium_concentration = float(request.form['Ce'])
 
-    # 这边我进行了加和运算，你需要怎么算就怎么算吧
     np.random.seed(80)
     def readData_cv(K=9):
-        df = pd.read_csv("C:\\data1\\new_data.csv")
+        df = pd.read_csv("new_data.csv")
         all_data = np.zeros((488, 10))
         all_data[:, 0] = df['CEC cmol/kg'].values
         all_data[:, 1] = df['pH'].values
-        # Load 粘土含量 %
         all_data[:, 2] = df['TOC %'].values
-        # Load 粘土含量 %
-        all_data[:, 3] = df['粘土含量 %'].values
-        # Load 粘土含量 %
+        all_data[:, 3] = df['clay %'].values
         all_data[:, 4] = df['BET m2/g'].values
-        # Load 温度
-        all_data[:, 5] = df['温度'].values
-        # Load 土壤/溶液 g/mL
-        all_data[:, 6] = df['土壤/溶液 g/mL'].values
-        # Load 溶液平衡浓度Ce ug/L
-        all_data[:, 7] = df['溶液平衡浓度Ce ug/L'].values
-        # Load log土壤上有机物吸附量 ug/g
-        all_data[:, 8] = df['log土壤上有机物吸附量 ug/g'].values
-        # Load isotherm
+        all_data[:, 5] = df['T k'].values
+        all_data[:, 6] = df['ratio g/mL'].values
+        all_data[:, 7] = df['Ce ug/L'].values
+        all_data[:, 8] = df['logQe ug/g'].values
         all_data[:, 9] = df['isotherm'].values
-        #Number of groups
         numOfGroup = np.zeros((1,))
         numOfGroup[0] = np.size(np.unique(all_data[:, 9]))
-    #Cross validation split (K-fold)
-    #k-1 fold, last fold as test set
-    #Split according to group
         ratio = 1.0/K
         indice = []
         for i in range(1):
@@ -110,11 +86,7 @@ def submit():
             cnt += np.shape(X_folds[i])[0]
         print(cnt)
         return X_folds, y_folds
-
-
-
     np.random.seed(80)
-
 
     K = 9
     X_folds, y_folds = readData_cv(K)
@@ -127,7 +99,6 @@ def submit():
     huber_err = np.zeros((3, K-1))
     logcosh_err = np.zeros((3, K-1))
     for i in range(K-1):
-    #Generate training set and validation set
         X_valid = X_folds[i]
         y_valid = y_folds[i]
         X_train = np.zeros((0, 8))
@@ -140,26 +111,16 @@ def submit():
 
         regr2.fit(X_train, y_train)
 
-
         y_pred_train = regr2.predict(X_train)
         y_pred_valid = regr2.predict(X_valid)
         y_pred_test = regr2.predict(X_test)
 
-
-
     x = pd.DataFrame([[cec,ph,toc,clay,bet,temperature,solid_liquid_ratio,equilibrium_concentration]], columns = ['f0','f1','f2','f3','f4','f5','f6','f7']) # 
     y = regr2.predict(x)
-    #x =['pH':ph , '粘土含量':clay , 'CEC cmol/kg':cec , 'TOC %':toc , 'BET m2/g':bet , '温度':temperature , '土壤/溶液 g/mL':solid_liquid_ratio , '溶液平衡浓度Ce ug/L':equilibrium_concentration]
+   
     result = y
 
-
-
-    # 将结果返回给前端
-    # return jsonify({'result': result})
-
     return render_template('result.html', result=result)
-
-
 
 if __name__ == '__main__':
     app.run()
